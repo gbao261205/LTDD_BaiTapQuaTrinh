@@ -9,17 +9,17 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
-    private static final String BASE_URL = "https://food-api-backend-lerp.onrender.com/api/";
+    private static final String BASE_URL = "https://food-api-backend-lerp.onrender.com/api";
 
     private static Retrofit retrofit;
 
     public static Retrofit getRetrofit() {
         if (retrofit == null) {
-            // Tạo HttpLoggingInterceptor để log request/response
+
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
             loggingInterceptor. setLevel(HttpLoggingInterceptor.Level.BODY);
 
-            // Tạo OkHttpClient
+
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
                     .addInterceptor(loggingInterceptor)
                     .connectTimeout(30, java.util.concurrent.TimeUnit. SECONDS)
