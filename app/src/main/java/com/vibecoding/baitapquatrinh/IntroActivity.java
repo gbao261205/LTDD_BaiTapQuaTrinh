@@ -21,11 +21,11 @@ public class IntroActivity extends AppCompatActivity {
         buttonBatDau = findViewById(R.id.buttonBatDau);
 
         //Lắng nghe sự kiện nút bắt đầu
-//        buttonBatDau.setOnClickListener(v -> {
-//            // Chuyển đến trang /login nếu chưa đăng nhập hoặc trang /main nếu đã đăng nhập
-//            Intent intent = new Intent(IntroActivity.this, LoginActivity.class);
-//            startActivity(intent);
-//            finish();
-//        });
+        buttonBatDau.setOnClickListener(v -> {
+            // Chuyển đến trang /login nếu chưa đăng nhập hoặc trang /main nếu đã đăng nhập
+            Intent intent = new Intent(IntroActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        });
     }
 }

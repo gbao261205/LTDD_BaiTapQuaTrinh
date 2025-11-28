@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".OtpActivity">
+
+    <EditText
+        android:id="@+id/etOtp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="200dp"
+        android:layout_marginEnd="32dp"
+        android:hint="Enter 6-digit OTP"
+        android:inputType="numberPassword"
+        android:maxLength="6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnVerify"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Verify OTP"
+        app:layout_constraintEnd_toEndOf="@+id/etOtp"
+        app:layout_constraintStart_toStartOf="@+id/etOtp"
+        app:layout_constraintTop_toBottomOf="@+id/etOtp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
