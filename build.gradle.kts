@@ -2,3 +2,11 @@
 plugins {
     alias(libs.plugins.android.application) apply false
 }
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        // You can add other repositories here if needed, e.g., jcenter() or a custom one
+    }
+}

@@ -4,9 +4,7 @@ plugins {
 
 android {
     namespace = "com.vibecoding.baitapquatrinh"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.vibecoding.baitapquatrinh"
@@ -39,27 +37,24 @@ android {
 }
 
 dependencies {
-
+    // --- Base AndroidX & Material Libraries (using versions from libs) ---
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
 
-    // Glide dependency
+    // --- UI Libraries ---
     implementation("com.github.bumptech.glide:glide:4.16.0")
-
-    // CircleIndicator dependency
     implementation("me.relex:circleindicator:2.1.6")
 
+    // --- Networking Libraries ---
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
+    implementation("com.google.code.gson:gson:2.10.1")
+
+    // --- Testing Libraries ---
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.10.0")
-    implementation("androidx. constraintlayout:constraintlayout:2.1.4")
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.google. android.material:material:1. 10.0")
-    implementation("com. squareup.okhttp3:okhttp:4.11.0")
-    implementation("com.google.code.gson:gson:2.10.1")
 }

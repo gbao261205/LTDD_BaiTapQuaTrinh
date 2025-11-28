@@ -3,10 +3,13 @@ package com.vibecoding.baitapquatrinh;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import com.vibecoding.baitapquatrinh.Model.User;
+import com.vibecoding.baitapquatrinh.Service.SessionManager;
 import com.vibecoding.baitapquatrinh.Slider_Images_ViewPager.Images;
 import com.vibecoding.baitapquatrinh.Slider_Images_ViewPager.ImagesViewPagerAdapter;
 
@@ -20,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private List<Images> imagesList;
     private Timer timer;
+    private SessionManager sessionManager;
+    private TextView tvGreeting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         viewPager = findViewById(R.id.viewPager);
+        tvGreeting = findViewById(R.id.tv_greeting);
+
+        sessionManager = new SessionManager(this);
 
         imagesList = getListImages();
         ImagesViewPagerAdapter adapter = new ImagesViewPagerAdapter(imagesList);
@@ -34,6 +42,18 @@ public class MainActivity extends AppCompatActivity {
 
         // Bắt đầu auto slide
         autoSlideImages();
+
+        // Lấy và hiển thị tên người dùng
+        displayUserName();
+    }
+
+    private void displayUserName() {
+        if (sessionManager.isLoggedIn()) {
+            User user = sessionManager.getCurrentUser();
+            if (user != null) {
+                tvGreeting.setText("Hi! " + user.getFull_name());
+            }
+        }
     }
 
     private List<Images> getListImages() {
