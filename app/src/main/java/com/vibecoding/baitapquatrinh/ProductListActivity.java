@@ -1,4 +1,4 @@
-package com.vibecoding.baitapquatrinh;
+package com.vibecoding.baitapquatrinh; //Hồ Lê Tín Nghĩa - 23162065
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,11 +23,10 @@ public class ProductListActivity extends AppCompatActivity {
     private ProductAdapter adapter;
     private List<Product> productList;
 
-    // Biến quản lý Lazy Loading
     private int currentPage = 1;
     private boolean isLoading = false;
     private final int LIMIT = 10;
-    private int categoryId = 1; // Giả sử đang xem Category 1
+    private int categoryId = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

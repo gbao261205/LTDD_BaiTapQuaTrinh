@@ -38,15 +38,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         Product product = productList.get(position);
         holder.txtName.setText(product.getName());
 
-        // Format giá tiền Việt Nam (VD: 50.000 đ)
         NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
         holder.txtPrice.setText(formatter.format(product.getPrice()));
 
-        // Load ảnh bằng Glide
         Glide.with(context)
                 .load(product.getImage_url())
-                .placeholder(R.drawable.ic_launcher_background) // Hình chờ
-                .error(R.drawable.ic_launcher_foreground)       // Hình lỗi
+                .placeholder(R.drawable.ic_launcher_background)
+                .error(R.drawable.ic_launcher_foreground)
                 .into(holder.imgProduct);
     }
 
@@ -55,7 +53,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         return productList.size();
     }
 
-    // Hàm thêm dữ liệu mới khi Lazy Load gọi về
     public void addData(List<Product> newProducts) {
         int startPos = productList.size();
         productList.addAll(newProducts);
@@ -68,7 +65,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
-            // Ánh xạ ID từ file XML item_product.xml
             imgProduct = itemView.findViewById(R.id.imgProduct);
             txtName = itemView.findViewById(R.id.txtName);
             txtPrice = itemView.findViewById(R.id.txtPrice);
