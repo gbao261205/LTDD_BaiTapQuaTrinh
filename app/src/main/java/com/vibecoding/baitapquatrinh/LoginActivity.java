@@ -3,21 +3,21 @@ package com.vibecoding.baitapquatrinh;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util. Log;
-import android.view. View;
-import android.widget. ProgressBar;
-import android.widget. TextView;
+import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
-import com. google.android.material.textfield. TextInputEditText;
+import com.google.android.material.textfield.TextInputEditText;
 import com.vibecoding.baitapquatrinh.Model.LoginRequest;
-import com. vibecoding.baitapquatrinh.Model.LoginResponse;
-import com.vibecoding.baitapquatrinh.Service.ApiInterface;
-import com.vibecoding.baitapquatrinh.Service. RetrofitClient;
-import com. vibecoding.baitapquatrinh.Service.SessionManager;
+import com.vibecoding.baitapquatrinh.Model.LoginResponse;
+import com.vibecoding.baitapquatrinh.Service.ApiClient;
+import com.vibecoding.baitapquatrinh.Service.ApiService;
+import com.vibecoding.baitapquatrinh.Service.SessionManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     private MaterialButton buttonLogin;
     private ProgressBar progressBar;
     private TextView textViewRegister;
-    private ApiInterface apiInterface;
+    private ApiService apiService;
     private SessionManager sessionManager;
 
     @Override
@@ -49,8 +49,8 @@ public class LoginActivity extends AppCompatActivity {
         initViews();
         setupClickListeners();
 
-        // Khởi tạo Retrofit API
-        apiInterface = RetrofitClient.getApiService();
+        // Use the standardized ApiClient and ApiService
+        apiService = ApiClient.getClient().create(ApiService.class);
     }
 
     private void initViews() {
@@ -62,20 +62,20 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
-        buttonLogin. setOnClickListener(v -> {
+        buttonLogin.setOnClickListener(v -> {
             if (validateInput()) {
                 performLogin();
             }
         });
 
         textViewRegister.setOnClickListener(v -> {
-            Toast.makeText(this, "Chức năng đăng ký sẽ được cập nhật", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
         });
     }
 
     private boolean validateInput() {
         String username = editTextUsername.getText().toString().trim();
-        String password = editTextPassword.getText(). toString();
+        String password = editTextPassword.getText().toString();
 
         if (TextUtils.isEmpty(username)) {
             editTextUsername.setError("Vui lòng nhập tài khoản");
@@ -90,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         if (password.length() < 3) {
-            editTextPassword. setError("Mật khẩu phải có ít nhất 3 ký tự");
+            editTextPassword.setError("Mật khẩu phải có ít nhất 3 ký tự");
             editTextPassword.requestFocus();
             return false;
         }
@@ -99,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void performLogin() {
-        String username = editTextUsername.getText(). toString().trim();
+        String username = editTextUsername.getText().toString().trim();
         String password = editTextPassword.getText().toString();
 
         Log.d(TAG, "Attempting login with username: " + username);
@@ -108,8 +108,8 @@ public class LoginActivity extends AppCompatActivity {
 
         LoginRequest loginRequest = new LoginRequest(username, password);
 
-        // Gọi API bằng Retrofit
-        apiInterface. login(loginRequest).enqueue(new Callback<LoginResponse>() {
+        // Call API using Retrofit
+        apiService.login(loginRequest).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 showLoading(false);
@@ -121,7 +121,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d(TAG, "Login response success: " + loginResponse.isSuccess());
 
                     if (loginResponse.isSuccess()) {
-                        // Lưu session
+                        // Save session
                         sessionManager.createSession(
                                 loginResponse.getToken(),
                                 loginResponse.getUser_info()
@@ -131,8 +131,8 @@ public class LoginActivity extends AppCompatActivity {
                                 "Đăng nhập thành công! ",
                                 Toast.LENGTH_SHORT).show();
 
-                        // Chuyển tới MainActivity
-                        startActivity(new Intent(LoginActivity.this, MainActivity. class));
+                        // Navigate to MainActivity
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         finish();
                     } else {
                         String message = loginResponse.getMessage();
@@ -148,7 +148,7 @@ public class LoginActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         Log.e(TAG, "Error reading response: " + e.getMessage());
                     }
-                    Toast.makeText(LoginActivity. this, "Lỗi server: " + response.code(), Toast. LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Lỗi server: " + response.code(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -165,7 +165,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void showLoading(boolean show) {
-        progressBar.setVisibility(show ? View. VISIBLE : View.GONE);
+        progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
         buttonLogin.setEnabled(!show);
         editTextUsername.setEnabled(!show);
         editTextPassword.setEnabled(!show);

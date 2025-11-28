@@ -11,19 +11,18 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.vibecoding.baitapquatrinh.Service.ApiService_Register;
+import com.vibecoding.baitapquatrinh.Service.ApiClient;
+import com.vibecoding.baitapquatrinh.Service.ApiService;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class OtpActivity extends AppCompatActivity {
 
     private EditText etOtp;
     private Button btnVerify;
-    private ApiService_Register apiServiceRegister;
+    private ApiService apiService;
     private String phone;
 
     @Override
@@ -36,12 +35,8 @@ public class OtpActivity extends AppCompatActivity {
 
         phone = getIntent().getStringExtra("phone");
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://your-api-url.com/") // Replace with your API base URL
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        apiServiceRegister = retrofit.create(ApiService_Register.class);
+        // Use the standardized ApiClient and ApiService
+        apiService = ApiClient.getClient().create(ApiService.class);
 
         btnVerify.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,7 +56,7 @@ public class OtpActivity extends AppCompatActivity {
 
         OtpVerificationRequest request = new OtpVerificationRequest(phone, otp);
 
-        apiServiceRegister.verifyOtp(request).enqueue(new Callback<Void>() {
+        apiService.verifyOtp(request).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
