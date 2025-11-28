@@ -14,6 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BaitapQuatrinh"
         android:usesCleartextTraffic="true">
+        android:theme="@style/Theme.BaitapQuatrinh"
+
+        android:usesCleartextTraffic="true">
+
         <activity
             android:name=".LoginActivity"
             android:exported="true">
@@ -22,6 +26,11 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity android:name=".Slider_Images_ViewPager.SliderViewPagerActivity" />
+
+        <activity android:name=".ProductListActivity">
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".ProfileActivity" />
