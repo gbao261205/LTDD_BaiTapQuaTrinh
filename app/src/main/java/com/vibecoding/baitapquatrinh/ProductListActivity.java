@@ -1,5 +1,6 @@
 package com.vibecoding.baitapquatrinh;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,6 +34,11 @@ public class ProductListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_list);
 
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("category_id")) {
+            categoryId = intent.getIntExtra("category_id", 1);
+        }
+
         // 1. Cấu hình RecyclerView
         recyclerView = findViewById(R.id.recyclerProducts);
         productList = new ArrayList<>();
@@ -45,7 +51,7 @@ public class ProductListActivity extends AppCompatActivity {
 
         // 2. Cấu hình Retrofit (Nhớ thay IP máy chủ của mày vào đây)
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://food-api-backend-lerp.onrender.com")
+                .baseUrl("https://food-api-backend-lerp.onrender.com/api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
