@@ -20,7 +20,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CategoriesActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity {
 
     private RecyclerView categoriesRecyclerView;
     private CategoryAdapter categoryAdapter;
@@ -29,7 +29,7 @@ public class CategoriesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_categories);
+        setContentView(R.layout.activity_home);
 
         initViews();
         setupRecyclerView(); // Thiết lập RecyclerView với danh sách rỗng trước
@@ -37,13 +37,13 @@ public class CategoriesActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        categoriesRecyclerView = findViewById(R.id.categoriesRecyclerView);
+        categoriesRecyclerView = findViewById(R.id.rv_categories);
     }
 
     private void setupRecyclerView() {
         // Khởi tạo danh sách rỗng ban đầu
         categoryList = new ArrayList<>();
-        
+
         // Thiết lập LayoutManager
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         categoriesRecyclerView.setLayoutManager(layoutManager);
@@ -69,7 +69,7 @@ public class CategoriesActivity extends AppCompatActivity {
                     categoryAdapter.notifyDataSetChanged();
                 } else {
                     // Xử lý khi có lỗi từ server (ví dụ: 404, 500)
-                    Toast.makeText(CategoriesActivity.this, "Lỗi: " + response.code(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HomeActivity.this, "Lỗi: " + response.code(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -77,7 +77,7 @@ public class CategoriesActivity extends AppCompatActivity {
             public void onFailure(Call<List<Category>> call, Throwable t) {
                 // Xử lý khi có lỗi mạng (ví dụ: không có internet)
                 Log.e("API_ERROR", "Lỗi khi gọi API", t);
-                Toast.makeText(CategoriesActivity.this, "Lỗi mạng, vui lòng thử lại!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomeActivity.this, "Lỗi mạng, vui lòng thử lại!", Toast.LENGTH_SHORT).show();
             }
         });
     }

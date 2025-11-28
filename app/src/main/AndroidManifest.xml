@@ -16,7 +16,7 @@
 
         <!-- Màn hình khởi chạy mới -->
         <activity
-            android:name=".CategoriesActivity"
+            android:name=".HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
