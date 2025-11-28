@@ -1,4 +1,4 @@
-package com.vibecoding.baitapquatrinh;
+package com.vibecoding.baitapquatrinh.Slider_Images_ViewPager;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -7,30 +7,36 @@ import android.os.Looper;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
-import com.vibecoding.baitapquatrinh.Slider_Images_ViewPager.Images;
-import com.vibecoding.baitapquatrinh.Slider_Images_ViewPager.ImagesViewPagerAdapter;
+import com.vibecoding.baitapquatrinh.R;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity {
+import me.relex.circleindicator.CircleIndicator;
+
+public class SliderViewPagerActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
+    private CircleIndicator circleIndicator;
     private List<Images> imagesList;
     private Timer timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_slider_viewpager);
 
         viewPager = findViewById(R.id.viewPager);
+        circleIndicator = findViewById(R.id.circle_indicator);
 
         imagesList = getListImages();
         ImagesViewPagerAdapter adapter = new ImagesViewPagerAdapter(imagesList);
         viewPager.setAdapter(adapter);
+
+        // Liên kết viewpager và indicator
+        circleIndicator.setViewPager(viewPager);
 
         // Bắt đầu auto slide
         autoSlideImages();
@@ -41,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         list.add(new Images("http://app.iotstar.vn:8081/appfoods/flipper/quangcao.png"));
         list.add(new Images("http://app.iotstar.vn:8081/appfoods/flipper/coffee.jpg"));
         list.add(new Images("http://app.iotstar.vn:8081/appfoods/flipper/companypizza.jpeg"));
-        list.add(new Images("http://app.iotstar.vn:8081/appfoods/flipper/flipper.jpg"));
+        list.add(new Images("http://app.iotstar.vn:8081/appfoods/flipper/themoingon.jpeg"));
         return list;
     }
 
