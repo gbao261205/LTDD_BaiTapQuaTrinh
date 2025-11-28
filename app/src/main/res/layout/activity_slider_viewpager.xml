@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".Slider_Images_ViewPager.SliderViewPagerActivity">
-
+    <!--Phan Văn Tài mssv: 23162086 -->
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
