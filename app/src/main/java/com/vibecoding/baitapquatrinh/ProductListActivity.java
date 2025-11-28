@@ -1,5 +1,6 @@
-package com.vibecoding.baitapquatrinh;
+package com.vibecoding.baitapquatrinh; //Hồ Lê Tín Nghĩa - 23162065
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,16 +23,20 @@ public class ProductListActivity extends AppCompatActivity {
     private ProductAdapter adapter;
     private List<Product> productList;
 
-    // Biến quản lý Lazy Loading
     private int currentPage = 1;
     private boolean isLoading = false;
     private final int LIMIT = 10;
-    private int categoryId = 1; // Giả sử đang xem Category 1
+    private int categoryId = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_list);
+
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("category_id")) {
+            categoryId = intent.getIntExtra("category_id", 1);
+        }
 
         // 1. Cấu hình RecyclerView
         recyclerView = findViewById(R.id.recyclerProducts);
@@ -45,7 +50,7 @@ public class ProductListActivity extends AppCompatActivity {
 
         // 2. Cấu hình Retrofit (Nhớ thay IP máy chủ của mày vào đây)
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://food-api-backend-lerp.onrender.com")
+                .baseUrl("https://food-api-backend-lerp.onrender.com/api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
