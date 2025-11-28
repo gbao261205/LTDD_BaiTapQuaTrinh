@@ -20,6 +20,13 @@ public class User {
         this.role = role;
     }
 
+    public User(String username, String full_name, String phone, String address) {
+        this.username = username;
+        this.full_name = full_name;
+        this.phone = phone;
+        this.address = address;
+    }
+
     // Getters and Setters
     public int getUser_id() { return user_id; }
     public void setUser_id(int user_id) { this.user_id = user_id; }

@@ -2,20 +2,25 @@ package com.vibecoding.baitapquatrinh;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android. text.TextUtils;
-import android.util. Log;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
-import android.widget. ProgressBar;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
-import com. google.android.material.textfield.TextInputEditText;
-import com.vibecoding.baitapquatrinh. Model.LoginRequest;
-import com.vibecoding.baitapquatrinh. Model.LoginResponse;
+import com.google.android.material.textfield.TextInputEditText;
+import com.vibecoding.baitapquatrinh.Model.LoginRequest;
+import com.vibecoding.baitapquatrinh.Model.LoginResponse;
+import com.vibecoding.baitapquatrinh.Service.ApiClient;
 import com.vibecoding.baitapquatrinh.Service.ApiService;
-import com. vibecoding.baitapquatrinh.Service.SessionManager;
+import com.vibecoding.baitapquatrinh.Service.SessionManager;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -29,12 +34,10 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout. activity_login);
+        setContentView(R.layout.activity_login);
 
-        // Initialize SessionManager
         sessionManager = new SessionManager(this);
 
-        // Kiểm tra nếu user đã đăng nhập
         if (sessionManager.isLoggedIn()) {
             redirectToMain();
             return;
@@ -43,18 +46,17 @@ public class LoginActivity extends AppCompatActivity {
         initViews();
         setupClickListeners();
 
-        // Initialize API service
-        apiService = new ApiService();
+        apiService = ApiClient.getClient().create(ApiService.class);
     }
 
     private void initViews() {
         editTextUsername = findViewById(R.id.editTextUsername);
-        editTextPassword = findViewById(R.id. editTextPassword);
-        buttonLogin = findViewById(R.id. buttonLogin);
+        editTextPassword = findViewById(R.id.editTextPassword);
+        buttonLogin = findViewById(R.id.buttonLogin);
         progressBar = findViewById(R.id.progressBar);
 
-        findViewById(R.id. textViewRegister).setOnClickListener(v -> {
-            Toast.makeText(this, "Chức năng đăng ký sẽ được cập nhật", Toast.LENGTH_SHORT).show();
+        findViewById(R.id.textViewRegister).setOnClickListener(v -> {
+            startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
         });
     }
 
@@ -67,24 +69,18 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean validateInput() {
-        String username = editTextUsername. getText().toString().trim();
-        String password = editTextPassword. getText().toString();
+        String username = editTextUsername.getText().toString().trim();
+        String password = editTextPassword.getText().toString();
 
         if (TextUtils.isEmpty(username)) {
-            editTextUsername. setError("Vui lòng nhập username");
+            editTextUsername.setError("Vui lòng nhập username");
             editTextUsername.requestFocus();
             return false;
         }
 
         if (TextUtils.isEmpty(password)) {
-            editTextPassword. setError("Vui lòng nhập password");
+            editTextPassword.setError("Vui lòng nhập password");
             editTextPassword.requestFocus();
-            return false;
-        }
-
-        if (password.length() < 3) {
-            editTextPassword.setError("Password phải có ít nhất 3 ký tự");
-            editTextPassword. requestFocus();
             return false;
         }
 
@@ -92,55 +88,49 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void performLogin() {
-        String username = editTextUsername.getText().toString(). trim();
+        String username = editTextUsername.getText().toString().trim();
         String password = editTextPassword.getText().toString();
-
-        Log.d(TAG, "Attempting login with username: " + username);
 
         showLoading(true);
 
         LoginRequest loginRequest = new LoginRequest(username, password);
 
-        apiService.login(loginRequest, new ApiService.LoginCallback() {
+        apiService.login(loginRequest).enqueue(new Callback<LoginResponse>() {
             @Override
-            public void onSuccess(LoginResponse response) {
-                runOnUiThread(() -> {
-                    showLoading(false);
-                    Log.d(TAG, "Login response success: " + response.isSuccess());
-
-                    if (response.isSuccess()) {
-                        // Lưu session
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                showLoading(false);
+                if (response.isSuccessful() && response.body() != null) {
+                    LoginResponse loginResponse = response.body();
+                    if (loginResponse.isSuccess()) {
                         sessionManager.createSession(
-                                response.getToken(),
-                                response.getUser_info()
+                                loginResponse.getToken(),
+                                loginResponse.getUser_info()
                         );
-
                         Toast.makeText(LoginActivity.this,
-                                "Đăng nhập thành công!  Xin chào " +
-                                        (response.getUser_info() != null ?  response.getUser_info().getFull_name() : ""),
+                                "Đăng nhập thành công! Xin chào " +
+                                        (loginResponse.getUser_info() != null ? loginResponse.getUser_info().getFull_name() : ""),
                                 Toast.LENGTH_SHORT).show();
-
                         redirectToMain();
                     } else {
-                        Toast.makeText(LoginActivity. this, response.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-                });
+                } else {
+                    Toast.makeText(LoginActivity.this, "Đăng nhập thất bại", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
-            public void onError(String error) {
-                runOnUiThread(() -> {
-                    showLoading(false);
-                    Log. e(TAG, "Login error: " + error);
-                    Toast.makeText(LoginActivity.this, "Lỗi: " + error, Toast.LENGTH_LONG).show();
-                });
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                showLoading(false);
+                Log.e(TAG, "Login error: " + t.getMessage());
+                Toast.makeText(LoginActivity.this, "Lỗi: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
 
     private void showLoading(boolean show) {
-        progressBar.setVisibility(show ? View. VISIBLE : View. GONE);
-        buttonLogin.setEnabled(! show);
+        progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+        buttonLogin.setEnabled(!show);
         editTextUsername.setEnabled(!show);
         editTextPassword.setEnabled(!show);
     }
