@@ -9,13 +9,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.vibecoding.baitapquatrinh.Adapter.ProductAdapter;
 import com.vibecoding.baitapquatrinh.Service.ApiService;
 import com.vibecoding.baitapquatrinh.Model.Product;
+import com.vibecoding.baitapquatrinh.Service.RetrofitClient;
+
 import java.util.ArrayList;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ProductListActivity extends AppCompatActivity {
 
@@ -34,8 +34,8 @@ public class ProductListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_product_list);
 
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra("category_id")) {
-            categoryId = intent.getIntExtra("category_id", 1);
+        if (intent != null && intent.hasExtra("CATEGORY_ID")) {
+            categoryId = intent.getIntExtra("CATEGORY_ID", 1);
         }
 
         // 1. Cấu hình RecyclerView
@@ -48,13 +48,8 @@ public class ProductListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
-        // 2. Cấu hình Retrofit (Nhớ thay IP máy chủ của mày vào đây)
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://food-api-backend-lerp.onrender.com/api/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        ApiService apiService = retrofit.create(ApiService.class);
+        // 2. Cấu hình Retrofit
+        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
 
         // 3. Hàm gọi API
         loadProducts(apiService);
