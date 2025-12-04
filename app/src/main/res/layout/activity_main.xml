@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="Hi! Nguyễn Hữu Trung"
+                android:text="Hi! Phan Văn Tài"
                 android:textColor="#FF6347"
                 android:textSize="20sp"
                 android:textStyle="bold"
