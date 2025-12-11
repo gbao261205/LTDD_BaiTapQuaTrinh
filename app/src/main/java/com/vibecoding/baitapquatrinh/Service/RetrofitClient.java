@@ -6,8 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
 
     private static Retrofit retrofit = null;
-    // Cập nhật Base URL mới
-    private static final String BASE_URL = "https://food-api-backend-lerp.onrender.com/";
+    private static final String BASE_URL = "https://food-delivery-api-4zc2.onrender.com";
 
     public static Retrofit getClient() {
         if (retrofit == null) {
